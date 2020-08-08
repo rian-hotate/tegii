@@ -2,9 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:teg_ii_app/screens/profile_screen.dart';
 
-
-
-
 class HomeScreen extends StatefulWidget {
   static const String id = 'home_screen';
 
@@ -13,8 +10,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -77,11 +72,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   borderRadius: BorderRadius.circular(40.0),
                 ),
                 onPressed: () {
-                  Navigator.push(
-                      context,
+                  Navigator.push(context,
                       MaterialPageRoute(builder: (context) => ProfileScreen()));
 //                  Navigator.pushNamed(context, ProfileScreen.id);
-                           },
+                },
                 child: Text(
                   '入力画面へ',
                   style: TextStyle(

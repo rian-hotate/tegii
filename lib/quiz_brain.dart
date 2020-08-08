@@ -1,8 +1,16 @@
-import 'questions.dart';
+class Question {
+  String questionText;
+  String questionAnswer;
+
+  Question({String q, a}) {
+    questionText = q;
+    questionAnswer = a;
+  }
+}
 
 class QuizBrain {
   int _questionNumber = 0;
-  List<Question> _questionBank =[
+  List<Question> _questionBank = [
     Question(q: '他人の言うことに左右されやすい。', a: 'AC'),
     Question(q: '納得のいかないことに抗議する。', a: 'CP'),
     Question(q: 'ユーモアのセンスがある。', a: 'FC'),
@@ -84,5 +92,4 @@ class QuizBrain {
   void reset() {
     _questionNumber = 0;
   }
-
 }

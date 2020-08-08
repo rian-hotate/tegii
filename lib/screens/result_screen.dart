@@ -1,13 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:teg_ii_app/quiz_brain.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:fl_chart/fl_chart.dart';
 
 QuizBrain quizBrain = QuizBrain();
 
 class ResultScreen extends StatefulWidget {
   String name = '', birthday = '', gender = '', age = ''; // 入力値保持用
+  // TODO 引数の初期値はこうやっていれるのはよろしくない
+  // クラスの引数は以下みたいにすると見た目的にも綺麗
+  // @required　を付けることで引数が渡されない状態を防げる
+//  ResultScreen({
+//    @required this.name,
+//    @required this.birthday,
+//    @required this.gender,
+//    @required this.age});
+
   ResultScreen(String name, birthday, gender, age) {
     this.name = name;
     this.birthday = birthday;
@@ -20,6 +28,170 @@ class ResultScreen extends StatefulWidget {
 }
 
 class _ResultScreenState extends State<ResultScreen> {
+  // TODO ここに「はい」「いいえ」「どちらでもない」を押した回数を保持する変数を定義する
+  int _cpCounter2 = 2;
+  int _npCounter2 = 2;
+  int _aCounter2 = 2;
+  int _fcCounter2 = 2;
+  int _acCounter2 = 2;
+  int _lCounter2 = 2;
+
+  int _cpCounter1 = 1;
+  int _npCounter1 = 1;
+  int _aCounter1 = 1;
+  int _fcCounter1 = 1;
+  int _acCounter1 = 1;
+  int _lCounter1 = 1;
+
+  int _cpCounter0 = 0;
+  int _npCounter0 = 0;
+  int _aCounter0 = 0;
+  int _fcCounter0 = 0;
+  int _acCounter0 = 0;
+  int _lCounter0 = 0;
+
+  int _otherCounter = 0;
+  void _incrementCounter() {
+    setState(() {
+      _otherCounter++;
+    });
+  }
+
+  int _cpYesCounter = 0;
+  int _npYesCounter = 0;
+  int _aYesCounter = 0;
+  int _fcYesCounter = 0;
+  int _acYesCounter = 0;
+  int _lYesCounter = 0;
+  void _cpIncrementCounter2() {
+    setState(() {
+      _cpYesCounter++;
+    });
+  }
+
+  void _npIncrementCounter2() {
+    setState(() {
+      _npYesCounter++;
+    });
+  }
+
+  void _aIncrementCounter2() {
+    setState(() {
+      _aYesCounter++;
+    });
+  }
+
+  void _fcIncrementCounter2() {
+    setState(() {
+      _fcYesCounter++;
+    });
+  }
+
+  void _acIncrementCounter2() {
+    setState(() {
+      _acYesCounter++;
+    });
+  }
+
+  void _lIncrementCounter2() {
+    setState(() {
+      _lYesCounter++;
+    });
+  }
+
+  int _cpOtherCounter = 0;
+  int _npOtherCounter = 0;
+  int _aOtherCounter = 0;
+  int _fcOtherCounter = 0;
+  int _acOtherCounter = 0;
+  int _lOtherCounter = 0;
+  void _cpIncrementCounter1() {
+    setState(() {
+      _cpOtherCounter++;
+    });
+  }
+
+  void _npIncrementCounter1() {
+    setState(() {
+      _npOtherCounter++;
+    });
+  }
+
+  void _aIncrementCounter1() {
+    setState(() {
+      _aOtherCounter++;
+    });
+  }
+
+  void _fcIncrementCounter1() {
+    setState(() {
+      _fcOtherCounter++;
+    });
+  }
+
+  void _acIncrementCounter1() {
+    setState(() {
+      _acOtherCounter++;
+    });
+  }
+
+  void _lIncrementCounter1() {
+    setState(() {
+      _lOtherCounter++;
+    });
+  }
+
+  int _cpNoCounter = 0;
+  int _npNoCounter = 0;
+  int _aNoCounter = 0;
+  int _fcNoCounter = 0;
+  int _acNoCounter = 0;
+  int _lNoCounter = 0;
+  void _cpIncrementCounter0() {
+    setState(() {
+      _cpNoCounter++;
+    });
+  }
+
+  void _npIncrementCounter0() {
+    setState(() {
+      _npNoCounter++;
+    });
+  }
+
+  void _aIncrementCounter0() {
+    setState(() {
+      _aNoCounter++;
+    });
+  }
+
+  void _fcIncrementCounter0() {
+    setState(() {
+      _fcNoCounter++;
+    });
+  }
+
+  void _acIncrementCounter0() {
+    setState(() {
+      _acNoCounter++;
+    });
+  }
+
+  void _lIncrementCounter0() {
+    setState(() {
+      _lNoCounter++;
+    });
+  }
+
+  int _questionnaireNumber = 0;
+  void _questionnaireNumber1() {
+    setState(() {
+      _questionnaireNumber++;
+    });
+  }
+
+  // それぞれのボタンの処理部分の最初にこの変数をインクリメントする処理を追加する
+
   List<Widget> scoreKeeper = [];
 
   List<Widget> scoreKeeper1 = [];
@@ -29,63 +201,60 @@ class _ResultScreenState extends State<ResultScreen> {
   List<Widget> scoreKeeper5 = [];
   List<Widget> scoreKeeper6 = [];
 
-
-
   void checkAnswer1(String userPickedAnswer) {
     String correctAnswer = quizBrain.getCorrectAnswer();
     setState(() {
       if (quizBrain.isFinished() == true) {
-        Alert(
-            context: context,
-            title: "お疲れさまでした！",
-            content: Column(
+        // TODO AlertDialog とかの方が良いかも
+        // ここのダイアログ出す部分の処理はCheckAnswer2,3でも使われてるので関数分けた方がコード短くなってきれいです
+        showDialog(
+          context: context,
+          builder: (context) {
+            return SimpleDialog(
+              title: Text("お疲れさまでした！"),
               children: <Widget>[
-                Text('採点ページへ進んで下さい'),
-              ],
-            ),
-            buttons: [
-              DialogButton(
-                onPressed: () {
-//                  Navigator.pushNamed(context, ResultScreen.id);
-                },
-                child: Text(
-                  "採点ページ",
-                  style: TextStyle(color: Colors.white, fontSize: 20),
+                // コンテンツ領域
+                SimpleDialogOption(
+                  onPressed: () => Navigator.pop(context),
+                  child: Text(
+                    "あなたのTEGエゴグラムを確認して下さい",
+                    style:
+                        TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+                  ),
                 ),
-              )
-            ]).show();
-        quizBrain.reset();
-
-        scoreKeeper = [];
+              ],
+            );
+          },
+        );
       } else {
         if (quizBrain.getCorrectAnswer() == 'CP') {
           scoreKeeper1.add(Text(
-            '2',
+            _cpCounter2.toString(),
             style: TextStyle(color: Colors.black),
           ));
         } else if (quizBrain.getCorrectAnswer() == 'NP') {
           scoreKeeper2.add(Text(
-            '2',
+            _npCounter2.toString(),
             style: TextStyle(color: Colors.black),
           ));
         } else if (quizBrain.getCorrectAnswer() == 'A') {
           scoreKeeper3.add(Text(
-            '2',
+            _aCounter2.toString(),
             style: TextStyle(color: Colors.black),
           ));
         } else if (quizBrain.getCorrectAnswer() == 'FC') {
           scoreKeeper4.add(Text(
-            '2',
+            _fcCounter2.toString(),
             style: TextStyle(color: Colors.black),
           ));
         } else if (quizBrain.getCorrectAnswer() == 'AC') {
           scoreKeeper5.add(Text(
-            '2',
+            _acCounter2.toString(),
             style: TextStyle(color: Colors.black),
           ));
         } else {
           scoreKeeper6.add(Text(
-            '2',
+            _lCounter2.toString(),
             style: TextStyle(color: Colors.black),
           ));
         }
@@ -98,57 +267,54 @@ class _ResultScreenState extends State<ResultScreen> {
     String correctAnswer = quizBrain.getCorrectAnswer();
     setState(() {
       if (quizBrain.isFinished() == true) {
-        Alert(
-            context: context,
-            title: "お疲れさまでした！",
-            content: Column(
+        showDialog(
+          context: context,
+          builder: (context) {
+            return SimpleDialog(
+              title: Text("お疲れさまでした！"),
               children: <Widget>[
-                Text('採点ページへ進んで下さい'),
-              ],
-            ),
-            buttons: [
-              DialogButton(
-                onPressed: () {
-//                  Navigator.pushNamed(context, ResultScreen.id);
-                },
-                child: Text(
-                  "採点ページ",
-                  style: TextStyle(color: Colors.white, fontSize: 20),
+                // コンテンツ領域
+                SimpleDialogOption(
+                  onPressed: () => Navigator.pop(context),
+                  child: Text(
+                    "あなたのTEGエゴグラムを確認して下さい",
+                    style:
+                        TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+                  ),
                 ),
-              )
-            ]).show();
-        quizBrain.reset();
-
-        scoreKeeper = [];
+              ],
+            );
+          },
+        );
       } else {
         if (quizBrain.getCorrectAnswer() == 'CP') {
           scoreKeeper1.add(Text(
-            '1',
+            _cpCounter1.toString(),
             style: TextStyle(color: Colors.black),
           ));
         } else if (quizBrain.getCorrectAnswer() == 'NP') {
           scoreKeeper2.add(Text(
-            '1',
+            _npCounter1.toString(),
             style: TextStyle(color: Colors.black),
           ));
         } else if (quizBrain.getCorrectAnswer() == 'A') {
           scoreKeeper3.add(Text(
-            '1',
+            _aCounter1.toString(),
             style: TextStyle(color: Colors.black),
           ));
         } else if (quizBrain.getCorrectAnswer() == 'FC') {
           scoreKeeper4.add(Text(
-            '1',
+            _fcCounter1.toString(),
             style: TextStyle(color: Colors.black),
           ));
         } else if (quizBrain.getCorrectAnswer() == 'AC') {
           scoreKeeper5.add(Text(
-            '1',
+            _acCounter1.toString(),
             style: TextStyle(color: Colors.black),
           ));
         } else {
           scoreKeeper6.add(Text(
-            '1',
+            _lCounter1.toString(),
             style: TextStyle(color: Colors.black),
           ));
         }
@@ -161,57 +327,54 @@ class _ResultScreenState extends State<ResultScreen> {
     String correctAnswer = quizBrain.getCorrectAnswer();
     setState(() {
       if (quizBrain.isFinished() == true) {
-        Alert(
-            context: context,
-            title: "お疲れさまでした！",
-            content: Column(
+        showDialog(
+          context: context,
+          builder: (context) {
+            return SimpleDialog(
+              title: Text("お疲れさまでした！"),
               children: <Widget>[
-                Text('採点ページへ進んで下さい'),
-              ],
-            ),
-            buttons: [
-              DialogButton(
-                onPressed: () {
-//                  Navigator.pushNamed(context, ResultScreen.id);
-                },
-                child: Text(
-                  "採点ページ",
-                  style: TextStyle(color: Colors.white, fontSize: 20),
+                // コンテンツ領域
+                SimpleDialogOption(
+                  onPressed: () => Navigator.pop(context),
+                  child: Text(
+                    "あなたのTEGエゴグラムを確認して下さい",
+                    style:
+                        TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+                  ),
                 ),
-              )
-            ]).show();
-        quizBrain.reset();
-
-        scoreKeeper = [];
+              ],
+            );
+          },
+        );
       } else {
         if (quizBrain.getCorrectAnswer() == 'CP') {
           scoreKeeper1.add(Text(
-            '0',
+            _cpCounter0.toString(),
             style: TextStyle(color: Colors.black),
           ));
         } else if (quizBrain.getCorrectAnswer() == 'NP') {
           scoreKeeper2.add(Text(
-            '0',
+            _npCounter0.toString(),
             style: TextStyle(color: Colors.black),
           ));
         } else if (quizBrain.getCorrectAnswer() == 'A') {
           scoreKeeper3.add(Text(
-            '0',
+            _aCounter0.toString(),
             style: TextStyle(color: Colors.black),
           ));
         } else if (quizBrain.getCorrectAnswer() == 'FC') {
           scoreKeeper4.add(Text(
-            '0',
+            _fcCounter0.toString(),
             style: TextStyle(color: Colors.black),
           ));
         } else if (quizBrain.getCorrectAnswer() == 'AC') {
           scoreKeeper5.add(Text(
-            '0',
+            _acCounter0.toString(),
             style: TextStyle(color: Colors.black),
           ));
         } else {
           scoreKeeper6.add(Text(
-            '0',
+            _lCounter0.toString(),
             style: TextStyle(color: Colors.black),
           ));
         }
@@ -220,17 +383,34 @@ class _ResultScreenState extends State<ResultScreen> {
     });
   }
 
+  // TODO
+  // 項目ごとの合計をグラフで表示したい
+  // https://pub.dev/packages/percent_indicator
+  // これでいけると思う
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('アンケート')),
+      // TODO
+      // quizBrain.isFinished()で質問が終わったかを判定してるっぽいので
+      // それをレイアウト側でも参照すれば画面を切り替えられる
+      // ダイアログ内で画面遷移しようとすると管理しなきゃいけないことがあって大変なのでオススメはしないです
+      // quizBrain.isFinished()　←これを使う場合はどこかにsetStateが必要です
+
+//         body: quizBrain.isFinished() ? Container() : Container();
+
+      // ダイアログの「採点ページ」ボタン押したらtrueになるような変数を作って
+      // 上記の様に条件に使うのも良いです
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 15.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-
           children: <Widget>[
-            Text('質問', style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),),
+            Text(
+              '質問 ' + _questionnaireNumber.toString(),
+              style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+            ),
             Container(
               height: 300.0,
               color: Color(0xff999999),
@@ -273,12 +453,21 @@ class _ResultScreenState extends State<ResultScreen> {
                               ),
                             ),
                             onPressed: () {
-                              checkAnswer1('はい');
-//                              print(scoreKeeper1=[]);
-//                              print(scoreKeeper2=[]);
-//                              print(scoreKeeper3=[]);
-//                              print(scoreKeeper4=[]);
-//                              print(scoreKeeper5=[]);
+                              if (quizBrain.getCorrectAnswer() == 'CP') {
+                                _cpYesCounter++;
+                              } else if (quizBrain.getCorrectAnswer() == 'NP') {
+                                _npYesCounter++;
+                              } else if (quizBrain.getCorrectAnswer() == 'A') {
+                                _aYesCounter++;
+                              } else if (quizBrain.getCorrectAnswer() == 'FC') {
+                                _fcYesCounter++;
+                              } else if (quizBrain.getCorrectAnswer() == 'AC') {
+                                _acYesCounter++;
+                              } else {
+                                _lYesCounter++;
+                              }
+                              checkAnswer1('2');
+                              _questionnaireNumber++;
                             },
                           ),
                         ),
@@ -301,7 +490,26 @@ class _ResultScreenState extends State<ResultScreen> {
                                 ),
                               ),
                               onPressed: () {
-                                checkAnswer2('どちらでもない');
+                                if (quizBrain.getCorrectAnswer() == 'CP') {
+                                  _cpOtherCounter++;
+                                } else if (quizBrain.getCorrectAnswer() ==
+                                    'NP') {
+                                  _npOtherCounter++;
+                                } else if (quizBrain.getCorrectAnswer() ==
+                                    'A') {
+                                  _aOtherCounter++;
+                                } else if (quizBrain.getCorrectAnswer() ==
+                                    'FC') {
+                                  _fcOtherCounter++;
+                                } else if (quizBrain.getCorrectAnswer() ==
+                                    'AC') {
+                                  _acOtherCounter++;
+                                } else {
+                                  _lOtherCounter++;
+                                }
+                                checkAnswer2('1');
+                                _otherCounter++;
+                                _questionnaireNumber++;
                               }),
                         ),
                       ),
@@ -323,7 +531,21 @@ class _ResultScreenState extends State<ResultScreen> {
                               ),
                             ),
                             onPressed: () {
-                              checkAnswer3('いいえ');
+                              if (quizBrain.getCorrectAnswer() == 'CP') {
+                                _cpNoCounter++;
+                              } else if (quizBrain.getCorrectAnswer() == 'NP') {
+                                _npNoCounter++;
+                              } else if (quizBrain.getCorrectAnswer() == 'A') {
+                                _aNoCounter++;
+                              } else if (quizBrain.getCorrectAnswer() == 'FC') {
+                                _fcNoCounter++;
+                              } else if (quizBrain.getCorrectAnswer() == 'AC') {
+                                _acNoCounter++;
+                              } else {
+                                _lNoCounter++;
+                              }
+                              checkAnswer3('0');
+                              _questionnaireNumber++;
                             },
                           ),
                         ),
@@ -337,7 +559,7 @@ class _ResultScreenState extends State<ResultScreen> {
               children: <Widget>[
                 Container(
                   height: 250.0,
-                  width: 200.0,
+                  width: 180.0,
                   child: AspectRatio(
                     aspectRatio: 1.7,
                     child: Card(
@@ -406,27 +628,42 @@ class _ResultScreenState extends State<ResultScreen> {
                           ),
                           barGroups: [
                             BarChartGroupData(x: 0, barRods: [
-                              BarChartRodData(y: 11, color: Colors.lightBlueAccent)
+                              BarChartRodData(
+                                  y: 2 * _cpYesCounter.toDouble() +
+                                      _cpOtherCounter.toDouble(),
+                                  color: Colors.lightBlueAccent)
                             ], showingTooltipIndicators: [
                               0
                             ]),
                             BarChartGroupData(x: 1, barRods: [
-                              BarChartRodData(y: 9, color: Colors.lightBlueAccent)
+                              BarChartRodData(
+                                  y: 2 * _npYesCounter.toDouble() +
+                                      _npOtherCounter.toDouble(),
+                                  color: Colors.lightBlueAccent)
                             ], showingTooltipIndicators: [
                               0
                             ]),
                             BarChartGroupData(x: 2, barRods: [
-                              BarChartRodData(y: 10, color: Colors.lightBlueAccent)
+                              BarChartRodData(
+                                  y: 2 * _aYesCounter.toDouble() +
+                                      _aOtherCounter.toDouble(),
+                                  color: Colors.lightBlueAccent)
                             ], showingTooltipIndicators: [
                               0
                             ]),
                             BarChartGroupData(x: 3, barRods: [
-                              BarChartRodData(y: 6, color: Colors.lightBlueAccent)
+                              BarChartRodData(
+                                  y: 2 * _fcYesCounter.toDouble() +
+                                      _fcOtherCounter.toDouble(),
+                                  color: Colors.lightBlueAccent)
                             ], showingTooltipIndicators: [
                               0
                             ]),
                             BarChartGroupData(x: 4, barRods: [
-                              BarChartRodData(y: 17, color: Colors.lightBlueAccent)
+                              BarChartRodData(
+                                  y: 2 * _acYesCounter.toDouble() +
+                                      _acOtherCounter.toDouble(),
+                                  color: Colors.lightBlueAccent)
                             ], showingTooltipIndicators: [
                               0
                             ]),
@@ -439,8 +676,9 @@ class _ResultScreenState extends State<ResultScreen> {
                 Column(
                   children: <Widget>[
                     Container(
-                      height: 105.0,
-                      width: 165.0,
+                      color: Colors.grey,
+                      height: 130.0,
+                      width: 200.0,
                       child: Padding(
                         padding: const EdgeInsets.all(3.0),
                         child: Column(
@@ -511,15 +749,24 @@ class _ResultScreenState extends State<ResultScreen> {
                                 ),
                               ],
                             ),
+                            Row(
+                              children: <Widget>[
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 5.0),
+                                  child:
+                                      Text('Q \(どちらでもない回数\）= $_otherCounter'),
+                                ),
+                              ],
+                            ),
                           ],
                         ),
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(top: 15.0),
+                      padding: const EdgeInsets.only(top: 0.0),
                       child: Container(
                         height: 105.0,
-                        width: 165.0,
+                        width: 200.0,
                         child: Padding(
                           padding: const EdgeInsets.all(5.0),
                           child: ListView(
@@ -537,49 +784,9 @@ class _ResultScreenState extends State<ResultScreen> {
                 ),
               ],
             ),
-
-
-
           ],
         ),
       ),
     );
   }
 }
-
-//import 'package:teg_ii_app/screens/profile_screen.dart';
-//
-//class ResultScreen extends StatelessWidget {
-//  final String text;
-////  static const String id = 'result_screen';
-//
-//  // receive data from the FirstScreen as a parameter
-//  ResultScreen({Key key, @required this.text}) : super(key: key);
-//
-//  @override
-//  Widget build(BuildContext context) {
-//    return Scaffold(
-//      appBar: AppBar(title: Text('Second screen')),
-//      body: Column(
-//        children: <Widget>[
-//          Text(
-//            text,
-//            style: TextStyle(fontSize: 24),
-//          ),
-//          Text(
-//            text,
-//            style: TextStyle(fontSize: 24),
-//          ),
-//          Text(
-//            text,
-//            style: TextStyle(fontSize: 24),
-//          ),
-//          Text(
-//            text,
-//            style: TextStyle(fontSize: 24),
-//          ),
-//        ],
-//      ),
-//    );
-//  }
-//}
