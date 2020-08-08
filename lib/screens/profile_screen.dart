@@ -1,36 +1,27 @@
+import 'package:enum_to_string/enum_to_string.dart';
 import 'package:flutter/material.dart';
-import 'package:teg_ii_app/screens/result_screen.dart';
+import 'package:flutter_picker/flutter_picker.dart';
+import 'package:teg_ii_app/model/user_data.dart';
+import "package:intl/intl.dart";
+import 'package:intl/date_symbol_data_local.dart';
 
-void main() => runApp(ProfileScreen());
-
-
-
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: '画面遷移メモ',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: ProfileScreen1(),
-      routes: <String, WidgetBuilder>{
-        '/my-page-1': (BuildContext context) => new ProfileScreen1(),
-        '/my-page-2': (BuildContext context) =>
-            new ResultScreen('load', 'load', 'load', 'load'),
-      },
-    );
+  ProfileScreenState createState() => ProfileScreenState();
+}
+
+class ProfileScreenState extends State<ProfileScreen> {
+  String name = '';
+  DateTime birthday;
+  GENDER gender;
+  int age;
+
+  @override
+  void initState() {
+    super.initState();
+    initializeDateFormatting("ja_JP");
   }
-}
 
-class ProfileScreen1 extends StatefulWidget {
-  @override
-  ProfileScreen1State createState() => ProfileScreen1State();
-}
-
-class ProfileScreen1State extends State<ProfileScreen1> {
-
-  String name = '', birthday = '', gender = '', age = ''; // 入力値保持用
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,39 +44,98 @@ class ProfileScreen1State extends State<ProfileScreen1> {
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                // TODO 生年月日はshowDatePickerとか使った方が良い
-                // https://api.flutter.dev/flutter/material/showDatePicker.html
-                child: TextField(
-                  onChanged: (text) {
-                    this.birthday = text;
-                  },
-                  decoration: InputDecoration(
-                      labelText: '生年月日', border: OutlineInputBorder()),
-                ),
-              ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    // TODO https://api.flutter.dev/flutter/material/RadioListTile-class.html
-                    child: TextField(
-                      onChanged: (text) {
-                        this.gender = text;
-                      },
-                      decoration: InputDecoration(
-                          labelText: '性別', border: OutlineInputBorder()),
+                child: Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey),
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  child: FlatButton(
+                    onPressed: () async {
+                      final selectedDate = await showDatePicker(
+                        context: context,
+                        initialDate: DateTime(DateTime.now().year - 30),
+                        firstDate: DateTime(DateTime.now().year - 120),
+                        lastDate: DateTime(DateTime.now().year + 1),
+                      );
+                      if (selectedDate != null) setState(() {
+                        birthday = selectedDate;
+                      });
+                    },
+                    child: Text(
+                      birthday != null
+                          ? DateFormat("yyyy/MM/dd", "ja_JP").format(birthday)
+                          : "選択してください",
                     ),
                   ),
-
+                ),
+              ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: TextField(
-                  onChanged: (text) {
-                    this.age = text;
-                  },
-
-                  // TODO ここもPicker使えば文字列入力じゃなくできる
-                  // https://pub.dev/packages/flutter_picker
-                  decoration: InputDecoration(
-                      labelText: '年齢', border: OutlineInputBorder()),
+                child: Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey),
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  child: Row(
+                    children: <Widget>[
+                      Expanded(
+                        child: RadioListTile(
+                          value: GENDER.man,
+                          groupValue: gender,
+                          onChanged: (GENDER value) => setState(() {
+                            gender = value;
+                          }),
+                          title: Text(EnumToString.parse(GENDER.man)),
+                        ),
+                      ),
+                      Expanded(
+                        child: RadioListTile(
+                          value: GENDER.woman,
+                          groupValue: gender,
+                          onChanged: (GENDER value) => setState(() {
+                            gender = value;
+                          }),
+                          title: Text(EnumToString.parse(GENDER.woman)),
+                        ),
+                      ),
+                      Expanded(
+                        child: RadioListTile(
+                          value: GENDER.other,
+                          groupValue: gender,
+                          onChanged: (GENDER value) => setState(() {
+                            gender = value;
+                          }),
+                          title: Text(EnumToString.parse(GENDER.other)),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey),
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  child: FlatButton(
+                    onPressed: () {
+                      Picker(
+                          adapter: NumberPickerAdapter(data: [
+                            NumberPickerColumn(
+                                begin: 0, end: 130, initValue: 20),
+                          ]),
+                          hideHeader: true,
+                          title: new Text("年齢を選択してください"),
+                          onConfirm: (Picker picker, List value) {
+                            setState(() {
+                              age = picker.getSelectedValues().first;
+                            });
+                          }).showDialog(context);
+                    },
+                    child: Text(age != null ? age.toString() : "選択してください"),
+                  ),
                 ),
               ),
 
@@ -108,40 +158,35 @@ class ProfileScreen1State extends State<ProfileScreen1> {
                     borderRadius: BorderRadius.circular(40.0),
                   ),
                   onPressed: () {
-                    // TODO ここは入力フォームに値が入っているかの確認をした方が良い
-                    // TODO HomeScreenでルートを指定したら現状のコードだと値を渡せない
-                    // 下記の様なクラスを作ってください
-                    /*
-                    clase Data {
-                      String name,
-                      String birthday,
-                      String gender,
-                      String age,
-                      Data({this.name, this.birthday, this.gender, this.age});
-                    }
-                     */
-                    // ex) Navigator.of(context).popAndPushNamed("/result", arguments: Data({name: name, birthday: birthday, gender: gender, age: age}));
-                    // 遷移先ではfinal args = ModalRoute.of(context).settings.arguments;
-                    // こんな感じで値をとってこれるはず
                     if (name.isNotEmpty &&
-                        birthday.isNotEmpty &&
-                        gender.isNotEmpty &&
-                        age.isNotEmpty)
-                      Navigator.push(
-                        context,
-                        new MaterialPageRoute<Null>(
-                          settings: const RouteSettings(name: "/my-page-2"),
-                          builder: (BuildContext context) => ResultScreen(
-                            this.name,
-                            this.birthday,
-                            this.gender,
-                            this.age,
-                          ),
-                        ),
-                      );
-                    // TODO elseとか使ってエラーの時にユーザーに知らせると良い
-                    // AlertDialogとか使って「全部入力してください」
-                    // みたいなのがあると親切です
+                        birthday != null &&
+                        gender != null &&
+                        age != null)
+                      Navigator.of(context).popAndPushNamed("/result",
+                          arguments: UserData(
+                              name: name,
+                              birthday: birthday,
+                              gender: gender,
+                              age: age));
+                    else showDialog(
+                      context: context,
+                      builder: (context) {
+                        return SimpleDialog(
+                          title: Text("入力されていない項目があります"),
+                          children: <Widget>[
+                            // コンテンツ領域
+                            SimpleDialogOption(
+                              onPressed: () => Navigator.of(context).pop(),
+                              child: Text(
+                                "OK",
+                                style:
+                                TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ],
+                        );
+                      },
+                    );
                   },
                   child: Text(
                     'アンケートへ',

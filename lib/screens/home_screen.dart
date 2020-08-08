@@ -72,11 +72,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   borderRadius: BorderRadius.circular(40.0),
                 ),
                 onPressed: () {
-                  // TODO
-                  // Navigator.pushNamed(context, "/profile");
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => ProfileScreen()));
-//                  Navigator.pushNamed(context, ProfileScreen.id);
+                  Navigator.pushNamed(context, "/profile");
                 },
                 child: Text(
                   '入力画面へ',
