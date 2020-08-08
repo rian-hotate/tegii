@@ -5,6 +5,11 @@ import 'package:fl_chart/fl_chart.dart';
 
 QuizBrain quizBrain = QuizBrain();
 
+
+// TODO ここのWarningは引数に初期値いれてるからです。
+// 「= ''」を消して「final」で引数を宣言すれば解決します
+
+// TODO ただ、もしmain.dartでルートを設定していたらクラスの引数はなくす
 class ResultScreen extends StatefulWidget {
   String name = '', birthday = '', gender = '', age = ''; // 入力値保持用
   // TODO 引数の初期値はこうやっていれるのはよろしくない
@@ -27,8 +32,28 @@ class ResultScreen extends StatefulWidget {
   _ResultScreenState createState() => _ResultScreenState();
 }
 
+/* const の宣言はこんな感じ別ファイルとかに置くとさらに良い
+ 見た感じ表示にしか使ってないから文字列でもっていた方が良いと思う
+const String CP_2 = "2";
+const String NP_2 = "2";
+const String FC_2 = "2";
+*/
+
 class _ResultScreenState extends State<ResultScreen> {
+
+  //　TODO　もしmain.dartでルートを宣言したら
+  /*
+  Data args;
+  @override
+  void initState() {
+    super.initState();
+    args = ModalRoute.of(context).settings.arguments;
+  }
+   */
   // TODO ここに「はい」「いいえ」「どちらでもない」を押した回数を保持する変数を定義する
+
+  // TODO 見た感じ固定値っぽいのでconst使った方が良い
+  // クラス外にconstを宣言してください
   int _cpCounter2 = 2;
   int _npCounter2 = 2;
   int _aCounter2 = 2;
@@ -51,6 +76,7 @@ class _ResultScreenState extends State<ResultScreen> {
   int _lCounter0 = 0;
 
   int _otherCounter = 0;
+  // TODO 使わない関数は消しちゃいましょう
   void _incrementCounter() {
     setState(() {
       _otherCounter++;
@@ -201,7 +227,7 @@ class _ResultScreenState extends State<ResultScreen> {
   List<Widget> scoreKeeper5 = [];
   List<Widget> scoreKeeper6 = [];
 
-  void checkAnswer1(String userPickedAnswer) {
+  void checkAnswer1(String userPickedAnswer/*TODO BuildContext parentContext*/) {
     String correctAnswer = quizBrain.getCorrectAnswer();
     setState(() {
       if (quizBrain.isFinished() == true) {
@@ -215,7 +241,13 @@ class _ResultScreenState extends State<ResultScreen> {
               children: <Widget>[
                 // コンテンツ領域
                 SimpleDialogOption(
-                  onPressed: () => Navigator.pop(context),
+                  /* TODO popUntilで指定のルートまでPopしてくれる
+                  onPressed: () => Navigator.of(context).popUntil(context, ModalRoute.withName("/"));
+                   */
+                  /*TODO もし他の新しい画面を出すなら
+                   Navigator.of(context).popAndPushNamed("/何か"));
+                   */
+                  onPressed: () => Navigator.of(context).push,
                   child: Text(
                     "あなたのTEGエゴグラムを確認して下さい",
                     style:
@@ -383,25 +415,10 @@ class _ResultScreenState extends State<ResultScreen> {
     });
   }
 
-  // TODO
-  // 項目ごとの合計をグラフで表示したい
-  // https://pub.dev/packages/percent_indicator
-  // これでいけると思う
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('アンケート')),
-      // TODO
-      // quizBrain.isFinished()で質問が終わったかを判定してるっぽいので
-      // それをレイアウト側でも参照すれば画面を切り替えられる
-      // ダイアログ内で画面遷移しようとすると管理しなきゃいけないことがあって大変なのでオススメはしないです
-      // quizBrain.isFinished()　←これを使う場合はどこかにsetStateが必要です
-
-//         body: quizBrain.isFinished() ? Container() : Container();
-
-      // ダイアログの「採点ページ」ボタン押したらtrueになるような変数を作って
-      // 上記の様に条件に使うのも良いです
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 15.0),
         child: Column(

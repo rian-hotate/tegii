@@ -65,6 +65,7 @@ class ProfileScreen1State extends State<ProfileScreen1> {
               ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
+                    // TODO https://api.flutter.dev/flutter/material/RadioListTile-class.html
                     child: TextField(
                       onChanged: (text) {
                         this.gender = text;
@@ -80,6 +81,9 @@ class ProfileScreen1State extends State<ProfileScreen1> {
                   onChanged: (text) {
                     this.age = text;
                   },
+
+                  // TODO ここもPicker使えば文字列入力じゃなくできる
+                  // https://pub.dev/packages/flutter_picker
                   decoration: InputDecoration(
                       labelText: '年齢', border: OutlineInputBorder()),
                 ),
@@ -105,6 +109,20 @@ class ProfileScreen1State extends State<ProfileScreen1> {
                   ),
                   onPressed: () {
                     // TODO ここは入力フォームに値が入っているかの確認をした方が良い
+                    // TODO HomeScreenでルートを指定したら現状のコードだと値を渡せない
+                    // 下記の様なクラスを作ってください
+                    /*
+                    clase Data {
+                      String name,
+                      String birthday,
+                      String gender,
+                      String age,
+                      Data({this.name, this.birthday, this.gender, this.age});
+                    }
+                     */
+                    // ex) Navigator.of(context).popAndPushNamed("/result", arguments: Data({name: name, birthday: birthday, gender: gender, age: age}));
+                    // 遷移先ではfinal args = ModalRoute.of(context).settings.arguments;
+                    // こんな感じで値をとってこれるはず
                     if (name.isNotEmpty &&
                         birthday.isNotEmpty &&
                         gender.isNotEmpty &&
@@ -121,6 +139,9 @@ class ProfileScreen1State extends State<ProfileScreen1> {
                           ),
                         ),
                       );
+                    // TODO elseとか使ってエラーの時にユーザーに知らせると良い
+                    // AlertDialogとか使って「全部入力してください」
+                    // みたいなのがあると親切です
                   },
                   child: Text(
                     'アンケートへ',

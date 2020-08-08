@@ -11,6 +11,13 @@ class TegII extends StatelessWidget {
       routes: {
         HomeScreen.id: (context) => HomeScreen(),
       },
+      /*TODO pageのルートはここで全部宣言しておいた方が管理が楽です
+        routes: <String, WidgetBuilder>{
+          '/': (_) => new HomeScreen(),
+          '/profile': (_) => ProfileScreen(),
+          '/result': (_) => ResultScreen(),
+        },
+      */
     );
   }
 }
