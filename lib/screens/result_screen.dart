@@ -227,7 +227,7 @@ class _ResultScreenState extends State<ResultScreen> {
   List<Widget> scoreKeeper5 = [];
   List<Widget> scoreKeeper6 = [];
 
-  void checkAnswer1(String userPickedAnswer/*TODO BuildContext parentContext*/) {
+  void checkAnswer1(String userPickedAnswer) {
     String correctAnswer = quizBrain.getCorrectAnswer();
     setState(() {
       if (quizBrain.isFinished() == true) {
